@@ -22,8 +22,8 @@ import math
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
-LINEAR_VEL = 0.22
-STOP_DISTANCE = 0.2
+LINEAR_VEL = 0.05
+STOP_DISTANCE = 0.05
 LIDAR_ERROR = 0.05
 SAFE_STOP_DISTANCE = STOP_DISTANCE + LIDAR_ERROR
 
@@ -39,7 +39,7 @@ class Obstacle():
         samples = len(scan.ranges)  # The number of samples is defined in 
                                     # turtlebot3_<model>.gazebo.xacro file,
                                     # the default is 360.
-        samples_view = 1            # 1 <= samples_view <= samples
+        samples_view = 6            # 1 <= samples_view <= samples
         
         if samples_view > samples:
             samples_view = samples
@@ -74,13 +74,13 @@ class Obstacle():
             if min_distance < SAFE_STOP_DISTANCE:
                 if turtlebot_moving:
                     twist.linear.x = 0.0
-                    twist.angular.z = 0.0
+                    twist.angular.z = 0.5
                     self._cmd_pub.publish(twist)
                     turtlebot_moving = False
                     rospy.loginfo('Stop!')
             else:
-                twist.linear.x = LINEAR_VEL
-                twist.angular.z = 0.0
+                twist.linear.x = -0.5
+                twist.angular.z = 0.5
                 self._cmd_pub.publish(twist)
                 turtlebot_moving = True
                 rospy.loginfo('Distance of the obstacle : %f', min_distance)
