@@ -44,7 +44,7 @@ class Obstacle():
         if samples_view > samples:
             samples_view = samples
 
-        if samples_view is 1:
+        if samples_view is 6:
             scan_filter.append(scan.ranges[0])
 
         else:
@@ -74,13 +74,13 @@ class Obstacle():
             if min_distance < SAFE_STOP_DISTANCE:
                 if turtlebot_moving:
                     twist.linear.x = 0.0
-                    twist.angular.z = 0.0
+                    twist.angular.z = 0.5
                     self._cmd_pub.publish(twist)
                     turtlebot_moving = False
                     rospy.loginfo('Stop!')
             else:
-                twist.linear.x = LINEAR_VEL
-                twist.angular.z = 0.0
+                twist.linear.x = -0.1
+                twist.angular.z = 0.5
                 self._cmd_pub.publish(twist)
                 turtlebot_moving = True
                 rospy.loginfo('Distance of the obstacle : %f', min_distance)
